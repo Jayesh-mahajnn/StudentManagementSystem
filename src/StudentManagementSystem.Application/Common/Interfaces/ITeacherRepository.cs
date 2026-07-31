@@ -11,5 +11,6 @@ public interface ITeacherRepository : IRepository<Teacher>
     Task<Teacher?> GetByIdWithDetailsAsync(int id);
 
     Task<PagedResult<Teacher>> GetPagedAsync(PaginationParams paginationParams);
+    Task<int> GetTotalCountAsync();
 
 }

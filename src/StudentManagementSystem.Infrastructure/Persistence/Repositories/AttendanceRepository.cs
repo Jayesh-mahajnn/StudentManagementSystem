@@ -20,4 +20,14 @@ public class AttendanceRepository : Repository<Attendance>, IAttendanceRepositor
 
     public async Task AddRangeAsync(IEnumerable<Attendance> attendances) =>
         await _dbSet.AddRangeAsync(attendances);
+
+    public async Task<(int totalRecords, int presentRecords)> GetOverallAttendanceStatsAsync()
+    {
+        var total = await _dbSet.CountAsync();
+        var present = await _dbSet.CountAsync(a => a.Status == Domain.Enums.AttendanceStatus.Present);
+        return (total, present);
+    }
+
+    public async Task<IReadOnlyList<Attendance>> GetByTeacherAndDateAsync(int teacherId, DateTime date) =>
+        await _dbSet.Where(a => a.MarkedByTeacherId == teacherId && a.Date.Date == date.Date).ToListAsync();
 }

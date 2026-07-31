@@ -57,4 +57,6 @@ public class DepartmentRepository : Repository<Department>, IDepartmentRepositor
             TotalCount = totalCount
         };
     }
+
+    public async Task<int> GetTotalCountAsync() => await _dbSet.CountAsync();
 }

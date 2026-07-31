@@ -56,4 +56,6 @@ public class TeacherRepository : Repository<Teacher>, ITeacherRepository
             TotalCount = totalCount
         };
     }
+
+    public async Task<int> GetTotalCountAsync() => await _dbSet.CountAsync();
 }

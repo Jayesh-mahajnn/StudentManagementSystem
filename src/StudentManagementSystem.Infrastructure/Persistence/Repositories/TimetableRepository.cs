@@ -26,4 +26,7 @@ public class TimetableRepository : Repository<Timetable>, ITimetableRepository
 
         return await query.AnyAsync();
     }
+
+    public async Task<int> GetCountForTeacherOnDayAsync(int teacherId, Domain.Enums.DayOfWeekEnum day) =>
+    await _dbSet.CountAsync(t => t.TeacherId == teacherId && t.DayOfWeek == day);
 }

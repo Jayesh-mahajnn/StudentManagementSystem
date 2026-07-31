@@ -13,4 +13,7 @@ public class AssignmentRepository : Repository<Assignment>, IAssignmentRepositor
 
     public async Task<Assignment?> GetByIdWithDetailsAsync(int id) =>
         await _dbSet.Include(a => a.Subject).Include(a => a.Teacher).FirstOrDefaultAsync(a => a.Id == id);
+
+    public async Task<int> GetCountByTeacherAsync(int teacherId) =>
+    await _dbSet.CountAsync(a => a.TeacherId == teacherId);
 }

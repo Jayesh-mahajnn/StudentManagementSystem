@@ -15,4 +15,7 @@ public class AnnouncementRepository : Repository<Announcement>, IAnnouncementRep
     public async Task<Announcement?> GetByIdWithDetailsAsync(int id) =>
         await _dbSet.Include(a => a.Department).Include(a => a.Course).Include(a => a.PostedByUser)
             .FirstOrDefaultAsync(a => a.Id == id);
+
+    public async Task<IReadOnlyList<Announcement>> GetRecentAsync(int count) =>
+    await _dbSet.OrderByDescending(a => a.PublishedAt).Take(count).ToListAsync();
 }

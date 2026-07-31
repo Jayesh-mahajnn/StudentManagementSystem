@@ -10,4 +10,6 @@ public class CourseRepository : Repository<Course>, ICourseRepository
 
     public async Task<IReadOnlyList<Course>> GetByDepartmentIdAsync(int departmentId) =>
         await _dbSet.Where(c => c.DepartmentId == departmentId).ToListAsync();
+
+    public async Task<int> GetTotalCountAsync() => await _dbSet.CountAsync();
 }

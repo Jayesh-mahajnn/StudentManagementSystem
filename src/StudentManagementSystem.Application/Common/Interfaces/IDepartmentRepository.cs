@@ -9,4 +9,7 @@ public interface IDepartmentRepository : IRepository<Department>
     Task<Department?> GetByIdWithDetailsAsync(int id);
 
     Task<PagedResult<Department>> GetPagedAsync(PaginationParams paginationParams);
+
+    Task<int> GetTotalCountAsync();
+
 }

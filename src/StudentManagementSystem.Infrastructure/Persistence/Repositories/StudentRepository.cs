@@ -66,4 +66,6 @@ public class StudentRepository : Repository<Student>, IStudentRepository
             TotalCount = totalCount
         };
     }
+
+    public async Task<int> GetTotalCountAsync() => await _dbSet.CountAsync();
 }

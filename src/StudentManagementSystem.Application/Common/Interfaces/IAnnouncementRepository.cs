@@ -5,4 +5,6 @@ public interface IAnnouncementRepository : IRepository<Announcement>
 {
     Task<IReadOnlyList<Announcement>> GetAllWithDetailsAsync();
     Task<Announcement?> GetByIdWithDetailsAsync(int id);
+
+    Task<IReadOnlyList<Announcement>> GetRecentAsync(int count);
 }

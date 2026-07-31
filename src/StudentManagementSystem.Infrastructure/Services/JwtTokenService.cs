@@ -32,12 +32,28 @@ public class JwtTokenService : IJwtTokenService
         var expiryMinutes = int.Parse(jwtSettings["AccessTokenExpiryMinutes"]!);
 
         var claims = new List<Claim>
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+        new Claim(JwtRegisteredClaimNames.Email, user.Email),
+        new Claim(ClaimTypes.Role, user.Role.ToString()),
+
+        // NEW
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+    };
+
+        // NEW
+        if (user.StudentId.HasValue)
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.Role.ToString()),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+            claims.Add(new Claim("StudentId", user.StudentId.Value.ToString()));
+        }
+
+        // NEW
+        if (user.TeacherId.HasValue)
+        {
+            claims.Add(new Claim("TeacherId", user.TeacherId.Value.ToString()));
+        }
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

@@ -12,4 +12,6 @@ public interface IStudentRepository : IRepository<Student>
     Task<Student?> GetByIdWithDetailsAsync(int id);
 
     Task<PagedResult<Student>> GetPagedAsync(PaginationParams paginationParams);
+
+    Task<int> GetTotalCountAsync();
 }

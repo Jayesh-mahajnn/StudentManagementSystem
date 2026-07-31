@@ -5,4 +5,6 @@ public interface IAssignmentRepository : IRepository<Assignment>
 {
     Task<IReadOnlyList<Assignment>> GetAllWithDetailsAsync();
     Task<Assignment?> GetByIdWithDetailsAsync(int id);
+
+    Task<int> GetCountByTeacherAsync(int teacherId);
 }
