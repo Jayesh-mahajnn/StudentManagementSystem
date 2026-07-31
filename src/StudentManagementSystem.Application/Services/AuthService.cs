@@ -35,6 +35,24 @@ public class AuthService : IAuthService
             Role = parsedRole
         };
 
+        // Link to the corresponding academic profile record, per role
+        if (parsedRole == UserRole.Student)
+        {
+            var student = await _unitOfWork.Students.GetByEnrollmentNumberAsync(dto.EnrollmentNumber!);
+            // Validator already guarantees this exists and is unlinked, but we defensively re-check here
+            // in case of a race condition between validation and this point (two simultaneous registrations).
+            if (student is null)
+                throw new InvalidOperationException("No student record found with this enrollment number.");
+            user.StudentId = student.Id;
+        }
+        else if (parsedRole == UserRole.Teacher)
+        {
+            var teacher = await _unitOfWork.Teachers.GetByEmailAsync(dto.TeacherEmail!);
+            if (teacher is null)
+                throw new InvalidOperationException("No teacher record found with this email.");
+            user.TeacherId = teacher.Id;
+        }
+
         await _unitOfWork.Users.AddAsync(user);
         await _unitOfWork.SaveChangesAsync();
 
@@ -104,4 +122,6 @@ public class AuthService : IAuthService
             RefreshToken = refreshTokenValue
         };
     }
+
+    
 }

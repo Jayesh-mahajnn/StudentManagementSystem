@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using StudentManagementSystem.Application.Common.Interfaces;
 using StudentManagementSystem.Application.DTOs.Auth;
 
@@ -9,17 +10,27 @@ namespace StudentManagementSystem.API.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
+    private readonly IValidator<RegisterDto> _registerValidator;
 
-    public AuthController(IAuthService authService)
+    public AuthController(IAuthService authService, IValidator<RegisterDto> registerValidator)
     {
         _authService = authService;
+        _registerValidator = registerValidator;
     }
 
     [HttpPost("register")]
     public async Task<ActionResult<AuthResponseDto>> Register(RegisterDto dto)
     {
-        var result = await _authService.RegisterAsync(dto);
-        return Ok(result);
+        var result = await _registerValidator.ValidateAsync(dto);
+        if (!result.IsValid)
+        {
+            var errors = result.Errors.GroupBy(e => e.PropertyName)
+                .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
+            throw new StudentManagementSystem.Shared.Exceptions.ValidationException(errors);
+        }
+
+        var authResult = await _authService.RegisterAsync(dto);
+        return Ok(authResult);
     }
 
     [HttpPost("login")]
