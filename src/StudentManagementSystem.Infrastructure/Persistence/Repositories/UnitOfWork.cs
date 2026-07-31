@@ -1,5 +1,6 @@
 ﻿using StudentManagementSystem.Application.Common.Interfaces;
 
+
 namespace StudentManagementSystem.Infrastructure.Persistence.Repositories;
 
 public class UnitOfWork : IUnitOfWork
@@ -11,6 +12,8 @@ public class UnitOfWork : IUnitOfWork
     private ICourseRepository? _courses;
     private IDepartmentRepository? _departments;
     private ISubjectRepository? _subjects;
+    private IUserRepository? _users;              // ← add here
+    private IRefreshTokenRepository? _refreshTokens;
 
     public UnitOfWork(AppDbContext context)
     {
@@ -22,8 +25,11 @@ public class UnitOfWork : IUnitOfWork
     public ICourseRepository Courses => _courses ??= new CourseRepository(_context);
     public IDepartmentRepository Departments => _departments ??= new DepartmentRepository(_context);
     public ISubjectRepository Subjects => _subjects ??= new SubjectRepository(_context);
+    public IUserRepository Users => _users ??= new UserRepository(_context);   // ← add here
 
     public async Task<int> SaveChangesAsync() => await _context.SaveChangesAsync();
 
     public void Dispose() => _context.Dispose();
+
+    public IRefreshTokenRepository RefreshTokens => _refreshTokens ??= new RefreshTokenRepository(_context);
 }

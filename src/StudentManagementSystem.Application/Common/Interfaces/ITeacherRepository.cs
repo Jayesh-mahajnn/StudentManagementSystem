@@ -5,4 +5,7 @@ namespace StudentManagementSystem.Application.Common.Interfaces;
 public interface ITeacherRepository : IRepository<Teacher>
 {
     Task<Teacher?> GetByEmailAsync(string email);
+
+    Task<IReadOnlyList<Teacher>> GetAllWithDetailsAsync();
+    Task<Teacher?> GetByIdWithDetailsAsync(int id);
 }

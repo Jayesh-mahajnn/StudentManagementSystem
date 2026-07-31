@@ -2,6 +2,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StudentManagementSystem.Domain\StudentManagementSystem.Domain.csproj" />
+    <ProjectReference Include="..\StudentManagementSystem.Shared\StudentManagementSystem.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.2.0" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
   </ItemGroup>
 
   <PropertyGroup>

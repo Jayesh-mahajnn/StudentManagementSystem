@@ -8,5 +8,8 @@ public interface IUnitOfWork : IDisposable
     IDepartmentRepository Departments { get; }
     ISubjectRepository Subjects { get; }
 
+    IUserRepository Users { get; }
+
+    IRefreshTokenRepository RefreshTokens { get; }
     Task<int> SaveChangesAsync();
 }

@@ -5,6 +5,15 @@ using StudentManagementSystem.Application.Services;
 using StudentManagementSystem.Infrastructure.Persistence;
 using StudentManagementSystem.Infrastructure.Persistence.Repositories;
 using StudentManagementSystem.Infrastructure.Persistence.Seed;
+using StudentManagementSystem.API.Middleware;
+using FluentValidation;
+using StudentManagementSystem.Application.Validators.Department;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using StudentManagementSystem.Infrastructure.Services;
+using StudentManagementSystem.Application.Validators.Student;
+using StudentManagementSystem.Application.Validators.Teacher;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +37,41 @@ builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>());
 // Dependency Injection
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ITeacherService, TeacherService>();
+
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var secretKey = jwtSettings["SecretKey"]!;
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(secretKey))
+    };
+});
+
+builder.Services.AddAuthorization();
+
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateDepartmentDtoValidator>();
 
 // CORS
 builder.Services.AddCors(options =>
@@ -77,13 +121,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 app.UseHttpsRedirection();
 
 app.UseCors("Frontend");
 
-// Uncomment after implementing JWT Authentication
-// app.UseAuthentication();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

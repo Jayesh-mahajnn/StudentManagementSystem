@@ -10,4 +10,16 @@ public class DepartmentRepository : Repository<Department>, IDepartmentRepositor
 
     public async Task<Department?> GetByCodeAsync(string code) =>
         await _dbSet.FirstOrDefaultAsync(d => d.Code == code);
+
+    public async Task<IReadOnlyList<Department>> GetAllWithDetailsAsync() =>
+        await _dbSet
+            .Include(d => d.Courses)
+            .Include(d => d.Students)
+            .ToListAsync();
+
+    public async Task<Department?> GetByIdWithDetailsAsync(int id) =>
+        await _dbSet
+            .Include(d => d.Courses)
+            .Include(d => d.Students)
+            .FirstOrDefaultAsync(d => d.Id == id);
 }

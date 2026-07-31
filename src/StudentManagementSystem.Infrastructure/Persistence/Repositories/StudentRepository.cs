@@ -13,4 +13,10 @@ public class StudentRepository : Repository<Student>, IStudentRepository
 
     public async Task<IReadOnlyList<Student>> GetByDepartmentIdAsync(int departmentId) =>
         await _dbSet.Where(s => s.DepartmentId == departmentId).ToListAsync();
+
+    public async Task<IReadOnlyList<Student>> GetAllWithDetailsAsync() =>
+    await _dbSet.Include(s => s.Department).Include(s => s.Course).ToListAsync();
+
+    public async Task<Student?> GetByIdWithDetailsAsync(int id) =>
+        await _dbSet.Include(s => s.Department).Include(s => s.Course).FirstOrDefaultAsync(s => s.Id == id);
 }
