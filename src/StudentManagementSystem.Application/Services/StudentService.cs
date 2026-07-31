@@ -2,7 +2,7 @@
 using StudentManagementSystem.Application.Common.Interfaces;
 using StudentManagementSystem.Application.DTOs.Student;
 using StudentManagementSystem.Domain.Entities;
-
+using StudentManagementSystem.Application.Common.Models;
 namespace StudentManagementSystem.Application.Services;
 
 public class StudentService : IStudentService
@@ -63,5 +63,18 @@ public class StudentService : IStudentService
         _unitOfWork.Students.Update(student);
         await _unitOfWork.SaveChangesAsync();
         return true;
+    }
+
+    public async Task<PagedResult<StudentDto>> GetPagedAsync(PaginationParams paginationParams)
+    {
+        var pagedStudents = await _unitOfWork.Students.GetPagedAsync(paginationParams);
+
+        return new PagedResult<StudentDto>
+        {
+            Items = _mapper.Map<IReadOnlyList<StudentDto>>(pagedStudents.Items),
+            PageNumber = pagedStudents.PageNumber,
+            PageSize = pagedStudents.PageSize,
+            TotalCount = pagedStudents.TotalCount
+        };
     }
 }

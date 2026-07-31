@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StudentManagementSystem.Application.Common.Interfaces;
+using StudentManagementSystem.Application.Common.Models;
 using StudentManagementSystem.Application.DTOs.Department;
 using StudentManagementSystem.Shared.Exceptions;
 using ValidationException = StudentManagementSystem.Shared.Exceptions.ValidationException;
@@ -29,10 +30,9 @@ public class DepartmentsController : ControllerBase
 
     // GET: api/departments
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<DepartmentDto>>> GetAll()
+    public async Task<ActionResult<PagedResult<DepartmentDto>>> GetAll([FromQuery] PaginationParams paginationParams)
     {
-        var departments = await _departmentService.GetAllAsync();
-        return Ok(departments);
+        return Ok(await _departmentService.GetPagedAsync(paginationParams));
     }
 
     // GET: api/departments/1

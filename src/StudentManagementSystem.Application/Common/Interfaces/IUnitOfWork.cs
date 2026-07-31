@@ -11,5 +11,11 @@ public interface IUnitOfWork : IDisposable
     IUserRepository Users { get; }
 
     IRefreshTokenRepository RefreshTokens { get; }
+
+    ITimetableRepository Timetables { get; }
+    IAssignmentRepository Assignments { get; }
+    IAnnouncementRepository Announcements { get; }
+    IAttendanceRepository Attendances { get; }
+    IMarksRepository MarksRecords { get; }   // named "MarksRecords" to avoid clashing with the DbSet name "Marks"
     Task<int> SaveChangesAsync();
 }

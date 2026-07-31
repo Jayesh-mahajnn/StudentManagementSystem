@@ -5,6 +5,7 @@ using StudentManagementSystem.Application.Common.Interfaces;
 using StudentManagementSystem.Application.DTOs.Teacher;
 using StudentManagementSystem.Shared.Exceptions;
 using ValidationException = StudentManagementSystem.Shared.Exceptions.ValidationException;
+using StudentManagementSystem.Application.Common.Models;
 
 namespace StudentManagementSystem.API.Controllers;
 
@@ -28,9 +29,9 @@ public class TeachersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<TeacherDto>>> GetAll()
+    public async Task<ActionResult<PagedResult<TeacherDto>>> GetAll([FromQuery] PaginationParams paginationParams)
     {
-        return Ok(await _teacherService.GetAllAsync());
+        return Ok(await _teacherService.GetPagedAsync(paginationParams));
     }
 
     [HttpGet("{id:int}")]

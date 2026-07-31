@@ -17,6 +17,13 @@ public class AppDbContext : DbContext
 
     public DbSet<RefreshToken> RefreshTokens { get; set; }
 
+    public DbSet<Timetable> Timetables { get; set; }
+    public DbSet<Assignment> Assignments { get; set; }
+    public DbSet<Announcement> Announcements { get; set; }
+
+    public DbSet<Attendance> Attendances { get; set; }
+    public DbSet<Marks> Marks { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);

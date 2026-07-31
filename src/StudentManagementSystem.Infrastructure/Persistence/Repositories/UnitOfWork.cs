@@ -14,6 +14,11 @@ public class UnitOfWork : IUnitOfWork
     private ISubjectRepository? _subjects;
     private IUserRepository? _users;              // ← add here
     private IRefreshTokenRepository? _refreshTokens;
+    private ITimetableRepository? _timetables;
+    private IAssignmentRepository? _assignments;
+    private IAnnouncementRepository? _announcements;
+    private IAttendanceRepository? _attendances;
+    private IMarksRepository? _marksRecords;
 
     public UnitOfWork(AppDbContext context)
     {
@@ -32,4 +37,11 @@ public class UnitOfWork : IUnitOfWork
     public void Dispose() => _context.Dispose();
 
     public IRefreshTokenRepository RefreshTokens => _refreshTokens ??= new RefreshTokenRepository(_context);
+
+    public ITimetableRepository Timetables => _timetables ??= new TimetableRepository(_context);
+    public IAssignmentRepository Assignments => _assignments ??= new AssignmentRepository(_context);
+    public IAnnouncementRepository Announcements => _announcements ??= new AnnouncementRepository(_context);
+
+    public IAttendanceRepository Attendances => _attendances ??= new AttendanceRepository(_context);
+    public IMarksRepository MarksRecords => _marksRecords ??= new MarksRepository(_context);
 }

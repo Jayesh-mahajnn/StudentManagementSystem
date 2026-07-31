@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using StudentManagementSystem.Application.Common.Interfaces;
+using StudentManagementSystem.Application.Common.Models;
 using StudentManagementSystem.Application.DTOs.Department;
 using StudentManagementSystem.Domain.Entities;
 
@@ -16,10 +17,17 @@ public class DepartmentService : IDepartmentService
         _mapper = mapper;
     }
 
-    public async Task<IReadOnlyList<DepartmentDto>> GetAllAsync()
+    public async Task<PagedResult<DepartmentDto>> GetPagedAsync(PaginationParams paginationParams)
     {
-        var departments = await _unitOfWork.Departments.GetAllWithDetailsAsync();
-        return _mapper.Map<IReadOnlyList<DepartmentDto>>(departments);
+        var paged = await _unitOfWork.Departments.GetPagedAsync(paginationParams);
+
+        return new PagedResult<DepartmentDto>
+        {
+            Items = _mapper.Map<IReadOnlyList<DepartmentDto>>(paged.Items),
+            PageNumber = paged.PageNumber,
+            PageSize = paged.PageSize,
+            TotalCount = paged.TotalCount
+        };
     }
 
     public async Task<DepartmentDto?> GetByIdAsync(int id)
