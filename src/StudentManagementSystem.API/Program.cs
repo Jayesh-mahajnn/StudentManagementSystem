@@ -14,6 +14,9 @@ using System.Text;
 using StudentManagementSystem.Infrastructure.Services;
 using StudentManagementSystem.Application.Validators.Student;
 using StudentManagementSystem.Application.Validators.Teacher;
+using StudentManagementSystem.Application.Common.Interfaces;
+using StudentManagementSystem.Infrastructure.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +55,8 @@ builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 builder.Services.AddScoped<IMarksService, MarksService>();
 
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+
+builder.Services.AddScoped<IAiInsightService, AiInsightService>();
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"]!;
