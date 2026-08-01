@@ -17,5 +17,7 @@ public interface IUnitOfWork : IDisposable
     IAnnouncementRepository Announcements { get; }
     IAttendanceRepository Attendances { get; }
     IMarksRepository MarksRecords { get; }   // named "MarksRecords" to avoid clashing with the DbSet name "Marks"
+
+    IConversationRepository Conversations { get; }
     Task<int> SaveChangesAsync();
 }

@@ -19,6 +19,7 @@ public class UnitOfWork : IUnitOfWork
     private IAnnouncementRepository? _announcements;
     private IAttendanceRepository? _attendances;
     private IMarksRepository? _marksRecords;
+    private IConversationRepository? _conversations;
 
     public UnitOfWork(AppDbContext context)
     {
@@ -44,4 +45,6 @@ public class UnitOfWork : IUnitOfWork
 
     public IAttendanceRepository Attendances => _attendances ??= new AttendanceRepository(_context);
     public IMarksRepository MarksRecords => _marksRecords ??= new MarksRepository(_context);
+
+    public IConversationRepository Conversations => _conversations ??= new ConversationRepository(_context);
 }

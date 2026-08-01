@@ -57,6 +57,7 @@ builder.Services.AddScoped<IMarksService, MarksService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 builder.Services.AddScoped<IAiInsightService, AiInsightService>();
+builder.Services.AddScoped<IChatService, ChatService>();
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"]!;

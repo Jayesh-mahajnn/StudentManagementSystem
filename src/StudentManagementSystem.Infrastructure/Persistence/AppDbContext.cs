@@ -24,6 +24,9 @@ public class AppDbContext : DbContext
     public DbSet<Attendance> Attendances { get; set; }
     public DbSet<Marks> Marks { get; set; }
 
+    public DbSet<Conversation> Conversations { get; set; }
+    public DbSet<ChatMessage> ChatMessages { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
